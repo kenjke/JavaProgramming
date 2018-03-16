@@ -1,0 +1,236 @@
+package com.epam.aleksandr_generalov.java.lesson2;
+
+import com.epam.aleksandr_generalov.java.lesson2.models.Car;
+import com.epam.aleksandr_generalov.java.lesson2.models.LightCar;
+import com.epam.aleksandr_generalov.java.lesson2.models.WeightCar;
+import com.epam.aleksandr_generalov.java.lesson2.utils.ArrayList;
+import com.epam.aleksandr_generalov.java.lesson2.utils.CollectionUtils;
+import com.epam.aleksandr_generalov.java.lesson2.utils.Pair;
+
+import java.util.Scanner;
+
+@SuppressWarnings("unchecked")
+public class Task4Runner {
+
+    private static Scanner scanner = new Scanner(System.in);
+    private static final String lightCar = "com.epam.aleksandr_generalov.java.lesson2.models.LightCar";
+    private static final String weightCar = "com.epam.aleksandr_generalov.java.lesson2.models.WeightCar";
+
+    public static void main(String[] args) {
+        Task4Runner runner = new Task4Runner();
+        runner.startApplication();
+    }
+
+    private void startApplication() {
+        try {
+            System.out.println("Please enter number of light cars:");
+            int numberOfCars = scanner.nextInt();
+            ArrayList<LightCar> lightCars = (ArrayList<LightCar>) createArrayOfCars(lightCar, numberOfCars);
+            System.out.println("Please enter number of weight cars:");
+            numberOfCars = scanner.nextInt();
+            ArrayList<WeightCar> weightCars = (ArrayList<WeightCar>) createArrayOfCars(weightCar, numberOfCars);
+            if (lightCars != null && weightCars != null) {
+                while (true) {
+                    System.out.println("Please enter action: 'add' - add information, 'edit' - edit information, " +
+                            "'remove' - remove information, 'cost' - get sum of all car's costs, 'sort' - sort cars by fuel consumption," +
+                            " 'find' - find car by parameters, 'exit' - exit from application");
+                    String action = scanner.nextLine();
+                    String carType;
+                    int index;
+                    switch (action) {
+                        case "add":
+                            carType = chooseTypeOfCar();
+                            if (carType != null && carType.equals(LightCar.class.getName())) {
+                                lightCars.add((LightCar) addSingleCar(carType));
+                            } else {
+                                weightCars.add((WeightCar) addSingleCar(carType));
+                            }
+                            break;
+                        case "edit":
+                            carType = chooseTypeOfCar();
+                            index = enterIndex();
+                            if (carType != null && carType.equals(LightCar.class.getName())) {
+                                lightCars.set(index, (LightCar) addSingleCar(carType));
+                            } else {
+                                weightCars.set(index, (WeightCar) addSingleCar(carType));
+                            }
+                            break;
+                        case "remove":
+                            carType = chooseTypeOfCar();
+                            index = enterIndex();
+                            if (carType != null && carType.equals(LightCar.class.getName())) {
+                                lightCars.remove(index);
+                            } else {
+                                weightCars.remove(index);
+                            }
+                            break;
+                        case "cost":
+                            showParkCost(lightCars, weightCars);
+                            break;
+                        case "sort":
+                            carType = chooseTypeOfCar();
+                            if (carType != null && carType.equals(LightCar.class.getName())) {
+                                CollectionUtils.sort(lightCars, LightCar.LightCarComparator);
+                                CollectionUtils.print(lightCars);
+                            } else {
+                                CollectionUtils.sort(weightCars, WeightCar.WeightCarComparator);
+                                CollectionUtils.print(weightCars);
+                            }
+                            break;
+                        case "find":
+                            carType = chooseTypeOfCar();
+                            if (carType != null && carType.equals(LightCar.class.getName())) {
+                                LightCar enteredLightCar = (LightCar) addSingleCar(lightCar);
+                                if (enteredLightCar != null && lightCars.contains(enteredLightCar)) {
+                                    System.out.println(enteredLightCar.toString());
+                                }
+                            } else {
+                                WeightCar enteredWeightCar = (WeightCar) addSingleCar(weightCar);
+                                if (enteredWeightCar != null && weightCars.contains(enteredWeightCar)) {
+                                    System.out.println(enteredWeightCar.toString());
+                                }
+                            }
+                        case "exit":
+                            return;
+                        default:
+                            System.out.println("Please enter correct action!");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            /*System.out.println("Unhandled exception!");*/
+        }
+    }
+
+    private void showParkCost(ArrayList<LightCar> lightCars, ArrayList<WeightCar> weightCars) {
+        Integer totalCost = 0;
+        for (LightCar lightCar : lightCars) {
+            totalCost += lightCar.getCost();
+        }
+        for (WeightCar weightCar : weightCars) {
+            totalCost += weightCar.getCost();
+        }
+        System.out.println("Total park cost is " + totalCost);
+    }
+
+    private int enterIndex() {
+        try {
+            System.out.println("Please enter index:");
+            return scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println("Unhandled exception!");
+        }
+        return 0;
+    }
+
+    private String chooseTypeOfCar() {
+        try {
+            while (true) {
+                System.out.println("Please choose car type: 'l' - light, 'w' - weight");
+                String action = scanner.nextLine();
+                switch (action) {
+                    case "l":
+                        return lightCar;
+                    case "w":
+                        return weightCar;
+                    default:
+                        System.out.println("Please enter correct type!");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Unhandled exception!");
+        }
+        return null;
+    }
+
+    private ArrayList<?> createArrayOfCars(String templateClass, int size) {
+        try {
+            ArrayList<Object> listOfCars = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                listOfCars.add(addSingleCar(templateClass));
+            }
+            return listOfCars;
+        } catch (Exception e) {
+            System.out.println("Unhandled exception!");
+        }
+        return null;
+    }
+
+    private Object addSingleCar(String templateClass) {
+        try {
+            Car commonInformation = enterCommonInformationAboutCar();
+            if (commonInformation != null) {
+                if (templateClass.equals(LightCar.class.getName())) {
+                    return new LightCar(commonInformation.getName(), commonInformation.getDefaultFuelConsuption(), commonInformation.getCost(),
+                            commonInformation.getNameOfMark(), commonInformation.getNameOfModel(), readArrayOfWeightsForLightCar());
+                } else {
+                    return new WeightCar(commonInformation.getName(), commonInformation.getDefaultFuelConsuption(), commonInformation.getCost(),
+                            commonInformation.getNameOfMark(), commonInformation.getNameOfModel(), readArrayOfWeightsForWeightCar());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Unhandled exception!");
+        }
+        return null;
+    }
+
+    private Car enterCommonInformationAboutCar() {
+        try {
+            Car car = new Car();
+            System.out.println("Enter car's name:");
+            scanner.nextLine();
+            car.setName(scanner.nextLine());
+            System.out.println("Enter default fuel consumption:");
+            car.setDefaultFuelConsuption(scanner.nextInt());
+            System.out.println("Enter car's cost:");
+            car.setCost(scanner.nextInt());
+            System.out.println("Enter name of car's mark:");
+            scanner.nextLine();
+            car.setNameOfMark(scanner.nextLine());
+            System.out.println("Enter name of car's model:");
+            car.setNameOfModel(scanner.nextLine());
+            return car;
+        } catch (Exception e) {
+            System.out.println("Unhandled exception!");
+        }
+        return null;
+    }
+
+    private Integer[] readArrayOfWeightsForLightCar() {
+        try {
+            System.out.println("Please number of weights for passengers:");
+            int arraySize = scanner.nextInt();
+            Integer[] result = new Integer[arraySize];
+            for (int i = 0; i < result.length; i++) {
+                result[i] = scanner.nextInt();
+            }
+            return result;
+        } catch (Exception e) {
+            System.out.println("Unhandled exception!");
+        }
+        return null;
+    }
+
+    private Pair[] readArrayOfWeightsForWeightCar() {
+        try {
+            System.out.println("Please number of weights for cargoes:");
+            int arraySize = scanner.nextInt();
+            Pair[] result = new Pair[arraySize];
+            for (int i = 0; i < result.length; i++) {
+                Pair weightPair = new Pair();
+                System.out.println("Please enter coefficient:");
+                int coefficient = scanner.nextInt();
+                weightPair.setCoefficient(coefficient);
+                System.out.println("Please enter weight:");
+                int weight = scanner.nextInt();
+                weightPair.setWeight(weight);
+                result[i] = weightPair;
+            }
+            return result;
+        } catch (Exception e) {
+            System.out.println("Unhandled exception!");
+        }
+        return null;
+    }
+}
