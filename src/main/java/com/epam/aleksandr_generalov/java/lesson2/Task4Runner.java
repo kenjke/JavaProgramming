@@ -98,8 +98,7 @@ public class Task4Runner {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            /*System.out.println("Unhandled exception!");*/
+            System.out.println("Unhandled exception!");
         }
     }
 
@@ -203,6 +202,7 @@ public class Task4Runner {
             int arraySize = scanner.nextInt();
             Integer[] result = new Integer[arraySize];
             for (int i = 0; i < result.length; i++) {
+                System.out.println("Please enter weight of passenger:");
                 result[i] = scanner.nextInt();
             }
             return result;

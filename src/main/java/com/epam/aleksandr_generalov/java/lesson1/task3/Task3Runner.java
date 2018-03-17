@@ -20,21 +20,16 @@ public class Task3Runner {
             int action = scanner.nextInt();
             switch (action) {
                 case 1:
-                    System.out.println((a + b));
+                    sum(a, b);
                     break;
                 case 2:
-                    System.out.println((a - b));
+                    subtract(a, b);
                     break;
                 case 3:
-                    System.out.println((a * b));
+                    multiply(a, b);
                     break;
                 case 4:
-                    if (b == 0) {
-                        System.out.println("Division by zero!");
-                        return;
-                    } else {
-                        System.out.println(((float) a / b));
-                    }
+                    divide(a, b);
                     break;
                 default:
                     System.out.println("Enter correct action!");
@@ -42,6 +37,26 @@ public class Task3Runner {
             }
         } catch (Exception e) {
             System.out.println("Unhandled exception!");
+        }
+    }
+
+    private static void sum(int a, int b) {
+        System.out.println((a + b));
+    }
+
+    private static void subtract(int a, int b) {
+        System.out.println((a - b));
+    }
+
+    private static void multiply(int a, int b) {
+        System.out.println((a * b));
+    }
+
+    private static void divide(int a, int b) {
+        if (b == 0) {
+            System.out.println("Division by zero!");
+        } else {
+            System.out.println(((float) a / b));
         }
     }
 }
