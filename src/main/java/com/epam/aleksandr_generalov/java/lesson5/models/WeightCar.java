@@ -1,6 +1,6 @@
-package com.epam.aleksandr_generalov.java.lesson2.models;
+package com.epam.aleksandr_generalov.java.lesson5.models;
 
-import com.epam.aleksandr_generalov.java.lesson2.utils.Pair;
+import javafx.util.Pair;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -18,8 +18,8 @@ public class WeightCar extends Car implements FuelCalculator<Pair> {
     @Override
     public void calculateFuelConsumption(Pair[] values) {
         this.totalFuelConsuption = getDefaultFuelConsuption();
-        for (Pair pair : values) {
-            this.totalFuelConsuption += pair.getCoefficient() * pair.getWeight();
+        for (Pair<Integer, Integer> pair : values) {
+            this.totalFuelConsuption += pair.getKey() * pair.getValue();
             this.totalFuelConsuption += this.totalFuelConsuption / 100;
         }
     }

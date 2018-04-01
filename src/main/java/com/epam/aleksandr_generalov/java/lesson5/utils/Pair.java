@@ -1,4 +1,4 @@
-package com.epam.aleksandr_generalov.java.lesson2.utils;
+package com.epam.aleksandr_generalov.java.lesson5.utils;
 
 import java.util.Iterator;
 

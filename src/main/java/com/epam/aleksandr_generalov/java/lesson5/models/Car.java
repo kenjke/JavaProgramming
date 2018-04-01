@@ -1,4 +1,4 @@
-package com.epam.aleksandr_generalov.java.lesson2.models;
+package com.epam.aleksandr_generalov.java.lesson5.models;
 
 public class Car {
 
