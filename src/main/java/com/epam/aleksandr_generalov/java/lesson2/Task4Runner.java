@@ -5,6 +5,7 @@ import com.epam.aleksandr_generalov.java.lesson2.models.LightCar;
 import com.epam.aleksandr_generalov.java.lesson2.models.WeightCar;
 import com.epam.aleksandr_generalov.java.lesson2.utils.ArrayList;
 import com.epam.aleksandr_generalov.java.lesson2.utils.CollectionUtils;
+import com.epam.aleksandr_generalov.java.lesson2.utils.NegativeNumberException;
 import com.epam.aleksandr_generalov.java.lesson2.utils.Pair;
 
 import java.util.Scanner;
@@ -25,9 +26,15 @@ public class Task4Runner {
         try {
             System.out.println("Please enter number of light cars:");
             int numberOfCars = scanner.nextInt();
+            if (numberOfCars < 0) {
+                throw new NegativeNumberException(numberOfCars);
+            }
             ArrayList<LightCar> lightCars = (ArrayList<LightCar>) createArrayOfCars(lightCar, numberOfCars);
             System.out.println("Please enter number of weight cars:");
             numberOfCars = scanner.nextInt();
+            if (numberOfCars < 0) {
+                throw new NegativeNumberException(numberOfCars);
+            }
             ArrayList<WeightCar> weightCars = (ArrayList<WeightCar>) createArrayOfCars(weightCar, numberOfCars);
             if (lightCars != null && weightCars != null) {
                 while (true) {
@@ -97,8 +104,8 @@ public class Task4Runner {
                     }
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Unhandled exception!");
+        } catch (NegativeNumberException e) {
+            e.printStackTrace();
         }
     }
 
@@ -168,69 +175,83 @@ public class Task4Runner {
                             commonInformation.getNameOfMark(), commonInformation.getNameOfModel(), readArrayOfWeightsForWeightCar());
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Unhandled exception!");
+        } catch (NegativeNumberException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    private Car enterCommonInformationAboutCar() {
-        try {
-            Car car = new Car();
-            System.out.println("Enter car's name:");
-            scanner.nextLine();
-            car.setName(scanner.nextLine());
-            System.out.println("Enter default fuel consumption:");
-            car.setDefaultFuelConsuption(scanner.nextInt());
-            System.out.println("Enter car's cost:");
-            car.setCost(scanner.nextInt());
-            System.out.println("Enter name of car's mark:");
-            scanner.nextLine();
-            car.setNameOfMark(scanner.nextLine());
-            System.out.println("Enter name of car's model:");
-            car.setNameOfModel(scanner.nextLine());
-            return car;
-        } catch (Exception e) {
-            System.out.println("Unhandled exception!");
+    private Car enterCommonInformationAboutCar() throws NegativeNumberException {
+        Car car = new Car();
+        System.out.println("Enter car's name:");
+        scanner.nextLine();
+        car.setName(scanner.nextLine());
+        System.out.println("Enter default fuel consumption:");
+        Integer defaultFuelConsumption = scanner.nextInt();
+        if (defaultFuelConsumption < 0) {
+            throw new NegativeNumberException(defaultFuelConsumption);
+        } else {
+            car.setDefaultFuelConsuption(defaultFuelConsumption);
         }
-        return null;
+        System.out.println("Enter car's cost:");
+        Integer cost = scanner.nextInt();
+        if (cost < 0) {
+            throw new NegativeNumberException(cost);
+        } else {
+            car.setCost(cost);
+        }
+        System.out.println("Enter name of car's mark:");
+        scanner.nextLine();
+        car.setNameOfMark(scanner.nextLine());
+        System.out.println("Enter name of car's model:");
+        car.setNameOfModel(scanner.nextLine());
+        return car;
     }
 
-    private Integer[] readArrayOfWeightsForLightCar() {
-        try {
-            System.out.println("Please number of weights for passengers:");
-            int arraySize = scanner.nextInt();
-            Integer[] result = new Integer[arraySize];
-            for (int i = 0; i < result.length; i++) {
-                System.out.println("Please enter weight of passenger:");
+    private Integer[] readArrayOfWeightsForLightCar() throws NegativeNumberException {
+        System.out.println("Please number of weights for passengers:");
+        int arraySize = scanner.nextInt();
+        if (arraySize < 0) {
+            throw new NegativeNumberException(arraySize);
+        }
+        Integer[] result = new Integer[arraySize];
+        for (int i = 0; i < result.length; i++) {
+            System.out.println("Please enter weight of passenger:");
+            int weight = scanner.nextInt();
+            if (weight < 0) {
+                throw new NegativeNumberException(weight);
+            } else {
                 result[i] = scanner.nextInt();
             }
-            return result;
-        } catch (Exception e) {
-            System.out.println("Unhandled exception!");
         }
-        return null;
+        return result;
     }
 
-    private Pair[] readArrayOfWeightsForWeightCar() {
-        try {
-            System.out.println("Please number of weights for cargoes:");
-            int arraySize = scanner.nextInt();
-            Pair[] result = new Pair[arraySize];
-            for (int i = 0; i < result.length; i++) {
-                Pair weightPair = new Pair();
-                System.out.println("Please enter coefficient:");
-                int coefficient = scanner.nextInt();
-                weightPair.setCoefficient(coefficient);
-                System.out.println("Please enter weight:");
-                int weight = scanner.nextInt();
-                weightPair.setWeight(weight);
-                result[i] = weightPair;
-            }
-            return result;
-        } catch (Exception e) {
-            System.out.println("Unhandled exception!");
+    private Pair[] readArrayOfWeightsForWeightCar() throws NegativeNumberException {
+        System.out.println("Please number of weights for cargoes:");
+        int arraySize = scanner.nextInt();
+        if (arraySize < 0) {
+            throw new NegativeNumberException(arraySize);
         }
-        return null;
+        Pair[] result = new Pair[arraySize];
+        for (int i = 0; i < result.length; i++) {
+            Pair weightPair = new Pair();
+            System.out.println("Please enter coefficient:");
+            int coefficient = scanner.nextInt();
+            if (coefficient < 0) {
+                throw new NegativeNumberException(coefficient);
+            } else {
+                weightPair.setCoefficient(coefficient);
+            }
+            System.out.println("Please enter weight:");
+            int weight = scanner.nextInt();
+            if (weight < 0) {
+                throw new NegativeNumberException(weight);
+            } else {
+                weightPair.setWeight(weight);
+            }
+            result[i] = weightPair;
+        }
+        return result;
     }
 }
