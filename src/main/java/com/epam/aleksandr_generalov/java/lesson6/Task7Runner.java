@@ -1,24 +1,25 @@
-package com.epam.aleksandr_generalov.java.lesson5;
+package com.epam.aleksandr_generalov.java.lesson6;
 
-import com.epam.aleksandr_generalov.java.lesson5.models.Car;
-import com.epam.aleksandr_generalov.java.lesson5.models.LightCar;
-import com.epam.aleksandr_generalov.java.lesson5.models.WeightCar;
-import com.epam.aleksandr_generalov.java.lesson5.utils.CollectionUtils;
-import com.epam.aleksandr_generalov.java.lesson5.utils.NegativeNumberException;
+import com.epam.aleksandr_generalov.java.lesson6.models.Car;
+import com.epam.aleksandr_generalov.java.lesson6.models.LightCar;
+import com.epam.aleksandr_generalov.java.lesson6.models.WeightCar;
+import com.epam.aleksandr_generalov.java.lesson6.utils.CollectionUtils;
+import com.epam.aleksandr_generalov.java.lesson6.utils.NegativeNumberException;
+import com.epam.aleksandr_generalov.java.lesson6.utils.Serializator;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 @SuppressWarnings("unchecked")
-public class Task6Runner {
+public class Task7Runner {
 
     private static Scanner scanner = new Scanner(System.in);
-    private static final String lightCar = "com.epam.aleksandr_generalov.java.lesson5.models.LightCar";
-    private static final String weightCar = "com.epam.aleksandr_generalov.java.lesson5.models.WeightCar";
+    private static final String lightCar = "com.epam.aleksandr_generalov.java.lesson6.models.LightCar";
+    private static final String weightCar = "com.epam.aleksandr_generalov.java.lesson6.models.WeightCar";
 
     public static void main(String[] args) {
-        Task6Runner runner = new Task6Runner();
+        Task7Runner runner = new Task7Runner();
         runner.startApplication();
     }
 
@@ -40,7 +41,8 @@ public class Task6Runner {
                 while (true) {
                     System.out.println("Please enter action: 'add' - add information, 'edit' - edit information, " +
                             "'remove' - remove information, 'cost' - get sum of all car's costs, 'sort' - sort cars by fuel consumption," +
-                            " 'find' - find car by parameters, 'exit' - exit from application");
+                            " 'find' - find car by parameters, 'read' - read information about car from file, " +
+                            "'write' - write information about car in file, 'exit' - exit from application");
                     String action = scanner.nextLine();
                     String carType;
                     int index;
@@ -97,6 +99,27 @@ public class Task6Runner {
                                     System.out.println(enteredWeightCar.toString());
                                 }
                             }
+                            break;
+                        case "read":
+                            System.out.println("Enter name of file");
+                            System.out.println(Serializator.readFile(scanner.nextLine()));
+                            break;
+                        case "write":
+                            carType = chooseTypeOfCar();
+                            if (carType != null && carType.equals(LightCar.class.getName())) {
+                                System.out.println("Please enter index for light car:");
+                                index = scanner.nextInt();
+                                System.out.println("Enter name of file");
+                                scanner.nextLine();
+                                Serializator.writeFile(scanner.nextLine(), lightCars.get(index));
+                            } else {
+                                System.out.println("Please enter index for weight car:");
+                                index = scanner.nextInt();
+                                System.out.println("Enter name of file");
+                                scanner.nextLine();
+                                Serializator.writeFile(scanner.nextLine(), weightCars.get(index));
+                            }
+                            break;
                         case "exit":
                             return;
                         default:
@@ -221,7 +244,7 @@ public class Task6Runner {
             if (weight < 0) {
                 throw new NegativeNumberException(weight);
             } else {
-                result[i] = scanner.nextInt();
+                result[i] = weight;
             }
         }
         return result;
