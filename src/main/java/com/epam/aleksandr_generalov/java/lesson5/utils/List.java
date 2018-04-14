@@ -1,7 +1,7 @@
-package com.epam.aleksandr_generalov.java.lesson2.utils;
+package com.epam.aleksandr_generalov.java.lesson5.utils;
 
 public interface List<E> {
-
+    
     void add(E value);
 
     E get(int index);

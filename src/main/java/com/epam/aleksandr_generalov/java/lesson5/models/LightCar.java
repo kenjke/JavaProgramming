@@ -1,46 +1,43 @@
-package com.epam.aleksandr_generalov.java.lesson2.models;
-
-import com.epam.aleksandr_generalov.java.lesson2.utils.Pair;
+package com.epam.aleksandr_generalov.java.lesson5.models;
 
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class WeightCar extends Car implements FuelCalculator<Pair> {
+public class LightCar extends Car implements FuelCalculator<Integer> {
 
-    private Pair[] cargoWeights;
+    private Integer[] passengersWeight;
 
-    public WeightCar(String name, Integer fuelConsumption, Integer cost, String nameOfMark, String nameOfModel, Pair[] cargoWeights) {
-        super(name, fuelConsumption, cost, nameOfMark, nameOfModel);
-        this.cargoWeights = cargoWeights;
-        calculateFuelConsumption(cargoWeights);
+    public LightCar(String name, Integer defaultFuelConsumption, Integer cost, String nameOfMark, String nameOfModel, Integer[] passengersWeight) {
+        super(name, defaultFuelConsumption, cost, nameOfMark, nameOfModel);
+        this.passengersWeight = passengersWeight;
+        calculateFuelConsumption(passengersWeight);
     }
 
     @Override
-    public void calculateFuelConsumption(Pair[] values) {
+    public void calculateFuelConsumption(Integer... values) {
         this.totalFuelConsuption = getDefaultFuelConsuption();
-        for (Pair pair : values) {
-            this.totalFuelConsuption += pair.getCoefficient() * pair.getWeight();
-            this.totalFuelConsuption += this.totalFuelConsuption / 100;
+        for (Integer weight : values) {
+            this.totalFuelConsuption += weight;
         }
     }
 
     @Override
     public String toString() {
-        return "WeightCar{" +
-                "cargoWeights=" + Arrays.toString(cargoWeights) +
+        return "LightCar{" +
+                "passengersWeight=" + Arrays.toString(passengersWeight) +
                 '}';
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof WeightCar) {
-            WeightCar toCompare = (WeightCar) obj;
+        if (obj instanceof LightCar) {
+            LightCar toCompare = (LightCar) obj;
             return this.getDefaultFuelConsuption().equals(toCompare.getDefaultFuelConsuption());
         }
         return false;
     }
 
-    public static Comparator<WeightCar> WeightCarComparator
+    public static Comparator<LightCar> LightCarComparator
             = (o1, o2) -> {
         if (o1 == null || o2 == null) {
             return 0;
