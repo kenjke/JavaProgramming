@@ -1,24 +1,40 @@
 package com.epam.aleksandr_generalov.java.lesson7;
 
+import com.epam.aleksandr_generalov.java.lesson7.daoimpl.EmployeeDaoImpl;
+import com.epam.aleksandr_generalov.java.lesson7.entities.Employee;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
+import java.util.List;
 
 class Task8Runner {
+
     public static void main(String args[]) {
+        Connection connection = null;
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521:xe", "system", "oracle");
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from emp");
-            while (rs.next()) {
-                System.out.println(rs.getInt(1) + "  " + rs.getString(2) + "  " + rs.getString(3));
+            connection = ConnectionConfiguration.getConnection();
+            if (connection != null) {
+                System.out.println("Connection established!" + connection.getMetaData().getURL());
             }
-            con.close();
+            EmployeeDaoImpl employeeDao = new EmployeeDaoImpl();
+            Employee employee = new Employee("Aleksandr", "Generalov");
+            employeeDao.insert(employee);
+            for (int i = 0; i < 10; i++) {
+                List<Employee> employees = employeeDao.selectAll();
+                for (int j = 0; j < employees.size(); j++) {
+                    employeeDao.insert(employee);
+                }
+            }
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
